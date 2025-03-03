@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -70,25 +71,76 @@ export default {
 			},
 			keyframes: {
 				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
+					from: { height: '0', opacity: '0' },
+					to: { height: 'var(--radix-accordion-content-height)', opacity: '1' }
 				},
 				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
+					from: { height: 'var(--radix-accordion-content-height)', opacity: '1' },
+					to: { height: '0', opacity: '0' }
+				},
+				'fade-in': {
+					'0%': { opacity: '0', transform: 'translateY(10px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' }
+				},
+				'fade-out': {
+					'0%': { opacity: '1', transform: 'translateY(0)' },
+					'100%': { opacity: '0', transform: 'translateY(10px)' }
+				},
+				'scale-in': {
+					'0%': { transform: 'scale(0.95)', opacity: '0' },
+					'100%': { transform: 'scale(1)', opacity: '1' }
+				},
+				'scale-out': {
+					from: { transform: 'scale(1)', opacity: '1' },
+					to: { transform: 'scale(0.95)', opacity: '0' }
+				},
+				'slide-in': {
+					'0%': { transform: 'translateX(100%)' },
+					'100%': { transform: 'translateX(0)' }
+				},
+				'slide-out': {
+					'0%': { transform: 'translateX(0)' },
+					'100%': { transform: 'translateX(100%)' }
+				},
+				'pulse-subtle': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.8' }
+				},
+				'spin-slow': {
+					'0%': { transform: 'rotate(0deg)' },
+					'100%': { transform: 'rotate(360deg)' }
+				},
+				'wave': {
+					'0%': { transform: 'scaleY(1)' },
+					'50%': { transform: 'scaleY(0.5)' },
+					'100%': { transform: 'scaleY(1)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+				'fade-out': 'fade-out 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+				'scale-in': 'scale-in 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+				'scale-out': 'scale-out 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+				'slide-in': 'slide-in 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+				'slide-out': 'slide-out 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+				'enter': 'fade-in 0.5s cubic-bezier(0.4, 0, 0.2, 1), scale-in 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+				'exit': 'fade-out 0.5s cubic-bezier(0.4, 0, 0.2, 1), scale-out 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+				'pulse-subtle': 'pulse-subtle 3s ease-in-out infinite',
+				'spin-slow': 'spin-slow 12s linear infinite',
+				'wave': 'wave 1.5s ease-in-out infinite'
+			},
+			boxShadow: {
+				'glass': '0 0 15px 1px rgba(255, 255, 255, 0.2)',
+				'glass-sm': '0 0 10px 1px rgba(255, 255, 255, 0.15)',
+				'glass-lg': '0 0 25px 2px rgba(255, 255, 255, 0.25)',
+				'neo': '5px 5px 15px rgba(0, 0, 0, 0.05), -5px -5px 15px rgba(255, 255, 255, 0.8)',
+				'neo-sm': '3px 3px 6px rgba(0, 0, 0, 0.05), -3px -3px 6px rgba(255, 255, 255, 0.8)',
+				'neo-lg': '10px 10px 20px rgba(0, 0, 0, 0.05), -10px -10px 20px rgba(255, 255, 255, 0.8)',
+			},
+			backdropBlur: {
+				'xs': '2px',
 			}
 		}
 	},
