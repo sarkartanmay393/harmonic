@@ -8,6 +8,8 @@ import { LazyMotion, domAnimation } from "framer-motion";
 import Index from "./pages/Index";
 import FrequencyDetail from "./pages/FrequencyDetail";
 import MapView from "./pages/MapView";
+import MediaLibrary from "./pages/MediaLibrary";
+import AddFrequency from "./pages/AddFrequency";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
@@ -24,6 +26,8 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/frequency/:id" element={<FrequencyDetail />} />
             <Route path="/map" element={<MapView />} />
+            <Route path="/media" element={<MediaLibrary />} />
+            <Route path="/add" element={<AddFrequency />} />
             <Route path="/about" element={<About />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

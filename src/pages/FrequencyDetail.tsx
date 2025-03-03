@@ -2,11 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Play, Pause, MapPin, ArrowLeft } from 'lucide-react';
+import { Play, Pause, MapPin, ArrowLeft, BookOpen, Link as LinkIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Layout from '@/components/Layout';
 import FrequencySlider from '@/components/FrequencySlider';
 import { getFrequencyById } from '@/lib/frequencies';
@@ -92,13 +93,50 @@ const FrequencyDetail = () => {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="bg-card rounded-lg border border-border/50 p-5 shadow-neo-sm"
               >
-                <h3 className="font-medium text-lg mb-3">Origin</h3>
-                <p className="text-muted-foreground">{frequency.origin}</p>
-                
-                <div className="mt-4 flex items-center text-sm text-muted-foreground">
-                  <MapPin className="h-4 w-4 mr-2" />
-                  <span>{frequency.location.name}</span>
-                </div>
+                <Tabs defaultValue="origin">
+                  <TabsList className="grid grid-cols-2 mb-4">
+                    <TabsTrigger value="origin">Origin</TabsTrigger>
+                    <TabsTrigger value="research">Research</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="origin" className="space-y-4">
+                    <p className="text-muted-foreground">{frequency.origin}</p>
+                    
+                    <div className="flex items-center text-sm text-muted-foreground">
+                      <MapPin className="h-4 w-4 mr-2" />
+                      <span>{frequency.location.name}</span>
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="research" className="space-y-4">
+                    {frequency.references && frequency.references.length > 0 ? (
+                      <div className="space-y-4">
+                        {frequency.references.map((ref, index) => (
+                          <div key={index} className="p-3 bg-secondary/30 rounded-md">
+                            <div className="flex items-start">
+                              <BookOpen className="h-4 w-4 mt-1 mr-2 text-primary/70" />
+                              <div>
+                                <p className="font-medium text-sm">{ref.title}</p>
+                                {ref.authors && <p className="text-xs text-muted-foreground mt-1">{ref.authors} ({ref.year})</p>}
+                                {ref.publisher && <p className="text-xs text-muted-foreground">{ref.publisher}</p>}
+                                <a 
+                                  href={ref.url} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="mt-2 text-xs text-primary flex items-center hover:underline"
+                                >
+                                  <LinkIcon className="h-3 w-3 mr-1" /> Read more
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">No research references available for this frequency.</p>
+                    )}
+                  </TabsContent>
+                </Tabs>
               </motion.div>
             </div>
 
@@ -110,7 +148,12 @@ const FrequencyDetail = () => {
             >
               <div>
                 <div className="flex items-center">
-                  <Badge className="mr-3">{frequency.hz} Hz</Badge>
+                  <Badge 
+                    className="mr-3"
+                    style={{ backgroundColor: frequency.color, color: '#fff' }}
+                  >
+                    {frequency.hz} Hz
+                  </Badge>
                   <h3 className="text-sm text-muted-foreground">
                     {frequency.category.charAt(0).toUpperCase() + frequency.category.slice(1)} Frequency
                   </h3>
@@ -126,7 +169,10 @@ const FrequencyDetail = () => {
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {frequency.benefits.map((benefit, index) => (
                     <li key={index} className="flex items-start">
-                      <div className="h-2 w-2 rounded-full bg-primary mt-2 mr-3" />
+                      <div 
+                        className="h-2 w-2 rounded-full mt-2 mr-3" 
+                        style={{ backgroundColor: frequency.color }}
+                      />
                       <span>{benefit}</span>
                     </li>
                   ))}
@@ -139,6 +185,10 @@ const FrequencyDetail = () => {
                 <Button
                   onClick={togglePlayback}
                   className="w-full py-6 text-lg"
+                  style={{ 
+                    backgroundColor: isPlaying ? frequency.color : undefined,
+                    color: isPlaying ? '#fff' : undefined
+                  }}
                   size="lg"
                 >
                   {isPlaying ? (
@@ -155,11 +205,11 @@ const FrequencyDetail = () => {
                 <div className="mt-5">
                   {isPlaying && (
                     <div className="frequency-wave-container">
-                      <div className="frequency-wave frequency-wave-1" style={{ height: `${Math.random() * 24 + 8}px` }}></div>
-                      <div className="frequency-wave frequency-wave-2" style={{ height: `${Math.random() * 24 + 8}px` }}></div>
-                      <div className="frequency-wave frequency-wave-3" style={{ height: `${Math.random() * 32 + 8}px` }}></div>
-                      <div className="frequency-wave frequency-wave-4" style={{ height: `${Math.random() * 32 + 8}px` }}></div>
-                      <div className="frequency-wave frequency-wave-5" style={{ height: `${Math.random() * 24 + 8}px` }}></div>
+                      <div className="frequency-wave frequency-wave-1" style={{ height: `${Math.random() * 24 + 8}px`, backgroundColor: frequency.color }}></div>
+                      <div className="frequency-wave frequency-wave-2" style={{ height: `${Math.random() * 24 + 8}px`, backgroundColor: frequency.color }}></div>
+                      <div className="frequency-wave frequency-wave-3" style={{ height: `${Math.random() * 32 + 8}px`, backgroundColor: frequency.color }}></div>
+                      <div className="frequency-wave frequency-wave-4" style={{ height: `${Math.random() * 32 + 8}px`, backgroundColor: frequency.color }}></div>
+                      <div className="frequency-wave frequency-wave-5" style={{ height: `${Math.random() * 24 + 8}px`, backgroundColor: frequency.color }}></div>
                     </div>
                   )}
                 </div>

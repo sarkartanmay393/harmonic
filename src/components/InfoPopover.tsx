@@ -12,12 +12,14 @@ interface InfoPopoverProps {
   title: string;
   content: React.ReactNode;
   triggerClassName?: string;
+  children?: React.ReactNode;
 }
 
 const InfoPopover: React.FC<InfoPopoverProps> = ({ 
   title, 
   content,
-  triggerClassName 
+  triggerClassName,
+  children
 }) => {
   return (
     <Popover>
@@ -29,7 +31,7 @@ const InfoPopover: React.FC<InfoPopoverProps> = ({
           )}
           aria-label="Show information"
         >
-          <Info className="h-4 w-4" />
+          {children || <Info className="h-4 w-4" />}
         </button>
       </PopoverTrigger>
       <PopoverContent 
