@@ -1,11 +1,13 @@
 
-import React, { useState, useEffect } from 'react';
-import { Play, Pause, Volume2, Volume1, VolumeX } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Play, Pause, Volume2, Volume1, VolumeX, RotateCcw } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { getToneGenerator } from '@/lib/audio';
 import FrequencySlider from './FrequencySlider';
+import DialFrequencySlider from './DialFrequencySlider';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface FrequencyPlayerProps {
   initialFrequency?: number;
@@ -20,6 +22,7 @@ const FrequencyPlayer: React.FC<FrequencyPlayerProps> = ({
   const [volume, setVolume] = useState(0.5);
   const [currentFrequency, setCurrentFrequency] = useState(initialFrequency);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [sliderType, setSliderType] = useState<'dial' | 'linear'>('dial');
 
   // Initialize audio on component mount
   useEffect(() => {
@@ -36,7 +39,7 @@ const FrequencyPlayer: React.FC<FrequencyPlayerProps> = ({
     };
   }, [initialFrequency]);
 
-  const togglePlayback = () => {
+  const togglePlayback = useCallback(() => {
     const toneGenerator = getToneGenerator();
     
     if (isPlaying) {
@@ -48,35 +51,78 @@ const FrequencyPlayer: React.FC<FrequencyPlayerProps> = ({
     setIsAnimating(true);
     setTimeout(() => setIsAnimating(false), 300);
     setIsPlaying(!isPlaying);
-  };
+  }, [isPlaying, currentFrequency]);
 
-  const handleVolumeChange = (values: number[]) => {
+  const handleVolumeChange = useCallback((values: number[]) => {
     const newVolume = values[0];
     setVolume(newVolume);
     getToneGenerator().setVolume(newVolume);
-  };
+  }, []);
 
-  const handleFrequencyChange = (frequency: number) => {
+  const handleFrequencyChange = useCallback((frequency: number) => {
     setCurrentFrequency(frequency);
-  };
+  }, []);
+
+  const resetFrequency = useCallback(() => {
+    setCurrentFrequency(432);
+    getToneGenerator().setFrequency(432);
+  }, []);
 
   // Determine which volume icon to show
   const VolumeIcon = volume === 0 ? VolumeX : volume < 0.5 ? Volume1 : Volume2;
 
   return (
     <div className={cn(
-      "rounded-xl border border-border/50 bg-white shadow-neo-sm overflow-hidden",
+      "rounded-xl border border-border/50 bg-white shadow-neo-sm overflow-hidden transition-all duration-300",
       className
     )}>
       <div className="p-6">
-        <FrequencySlider 
-          initialFrequency={initialFrequency}
-          onFrequencyChange={handleFrequencyChange}
-        />
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-lg font-semibold">Frequency Player</h2>
+          <Tabs 
+            value={sliderType} 
+            onValueChange={(value) => setSliderType(value as 'dial' | 'linear')}
+            className="h-8"
+          >
+            <TabsList className="h-8 p-0.5">
+              <TabsTrigger value="dial" className="h-7 px-3 text-xs">
+                Dial
+              </TabsTrigger>
+              <TabsTrigger value="linear" className="h-7 px-3 text-xs">
+                Slider
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
         
-        <div className="mt-8 space-y-6">
+        <Tabs value={sliderType} className="mb-8">
+          <TabsContent value="dial" className="mt-0">
+            <DialFrequencySlider 
+              initialFrequency={currentFrequency}
+              onFrequencyChange={handleFrequencyChange}
+            />
+          </TabsContent>
+          <TabsContent value="linear" className="mt-0">
+            <FrequencySlider 
+              initialFrequency={currentFrequency}
+              onFrequencyChange={handleFrequencyChange}
+            />
+          </TabsContent>
+        </Tabs>
+        
+        <div className="space-y-6">
           {/* Play/Pause Button */}
-          <div className="flex justify-center">
+          <div className="flex items-center justify-center space-x-3">
+            <Button
+              size="icon"
+              variant="outline"
+              onClick={resetFrequency}
+              className="h-10 w-10 rounded-full"
+              title="Reset to 432 Hz"
+            >
+              <RotateCcw className="h-4 w-4" />
+            </Button>
+            
             <Button
               onClick={togglePlayback}
               className={cn(

@@ -12,6 +12,8 @@ import MediaLibrary from "./pages/MediaLibrary";
 import AddFrequency from "./pages/AddFrequency";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
+import AppContainer from "./components/AppContainer";
+import TourGuide from "./components/TourGuide";
 
 const queryClient = new QueryClient();
 
@@ -22,15 +24,18 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/frequency/:id" element={<FrequencyDetail />} />
-            <Route path="/map" element={<MapView />} />
-            <Route path="/media" element={<MediaLibrary />} />
-            <Route path="/add" element={<AddFrequency />} />
-            <Route path="/about" element={<About />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <AppContainer>
+            <TourGuide />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/frequency/:id" element={<FrequencyDetail />} />
+              <Route path="/map" element={<MapView />} />
+              <Route path="/media" element={<MediaLibrary />} />
+              <Route path="/add" element={<AddFrequency />} />
+              <Route path="/about" element={<About />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </AppContainer>
         </BrowserRouter>
       </LazyMotion>
     </TooltipProvider>
