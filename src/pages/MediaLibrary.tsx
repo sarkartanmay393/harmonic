@@ -113,10 +113,10 @@ const mediaLibrary: MediaItem[] = [
 
 const MediaLibrary = () => {
   const [playingItemId, setPlayingItemId] = useState<string | null>(null);
-  
+
   const playSound = (item: MediaItem) => {
     const toneGenerator = getToneGenerator();
-    
+
     if (playingItemId === item.id) {
       // Stop playing
       toneGenerator.stop();
@@ -126,7 +126,7 @@ const MediaLibrary = () => {
       if (playingItemId) {
         toneGenerator.stop();
       }
-      
+
       // Play the new frequency if it's a 'sound' type with frequency
       if (item.type === 'sound' && item.frequency) {
         toneGenerator.play(item.frequency);
@@ -135,7 +135,7 @@ const MediaLibrary = () => {
         // For music and videos, we'd normally play the audio/video file
         // But for now, just simulate with a toast
         setPlayingItemId(item.id);
-        
+
         // Simulate playing for 3 seconds then stopping
         setTimeout(() => {
           setPlayingItemId(null);
@@ -150,193 +150,189 @@ const MediaLibrary = () => {
   const videos = mediaLibrary.filter(item => item.type === 'video');
 
   return (
-    <Layout>
-      <div className="pt-16 pb-20">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="max-w-6xl mx-auto px-4 sm:px-6"
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="max-w-6xl mx-auto px-4 sm:px-6"
+    >
+      <div className="mb-12 text-center">
+        <motion.h1
+          className="text-4xl font-bold"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <div className="mb-12 text-center">
-            <motion.h1 
-              className="text-4xl font-bold"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              Media Library
-            </motion.h1>
-            <motion.p 
-              className="mt-3 text-muted-foreground"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              Explore our collection of healing sounds, music, and educational videos
-            </motion.p>
-          </div>
-
-          <Tabs defaultValue="sounds" className="space-y-8">
-            <TabsList className="grid grid-cols-3 max-w-md mx-auto">
-              <TabsTrigger value="sounds" className="flex items-center gap-2">
-                <FileAudio className="h-4 w-4" />
-                <span>Sounds</span>
-              </TabsTrigger>
-              <TabsTrigger value="music" className="flex items-center gap-2">
-                <Music className="h-4 w-4" />
-                <span>Music</span>
-              </TabsTrigger>
-              <TabsTrigger value="videos" className="flex items-center gap-2">
-                <Video className="h-4 w-4" />
-                <span>Videos</span>
-              </TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="sounds" className="pt-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {sounds.map((sound) => (
-                  <motion.div 
-                    key={sound.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: sounds.indexOf(sound) * 0.1 }}
-                  >
-                    <Card className={`overflow-hidden transition-all duration-300 ${playingItemId === sound.id ? 'ring-2 ring-primary' : 'hover:shadow-lg'}`}>
-                      <div className="relative">
-                        <AspectRatio ratio={16/9}>
-                          <img 
-                            src={sound.thumbnail} 
-                            alt={sound.title}
-                            className="object-cover w-full h-full"
-                          />
-                        </AspectRatio>
-                        <Button
-                          size="icon"
-                          className="absolute bottom-3 right-3 h-10 w-10 rounded-full bg-white text-primary hover:bg-white/90 shadow-lg"
-                          onClick={() => playSound(sound)}
-                        >
-                          {playingItemId === sound.id ? (
-                            <Pause className="h-5 w-5" />
-                          ) : (
-                            <Play className="h-5 w-5 ml-0.5" />
-                          )}
-                        </Button>
-                        
-                        <div className="absolute top-3 left-3 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                          {sound.duration}
-                        </div>
-                        
-                        {sound.frequency && (
-                          <div className="absolute top-3 right-3 bg-primary/90 text-white text-xs px-2 py-1 rounded">
-                            {sound.frequency} Hz
-                          </div>
-                        )}
-                      </div>
-                      
-                      <CardContent className="p-4">
-                        <h3 className="font-semibold text-lg">{sound.title}</h3>
-                        <p className="text-sm text-muted-foreground mt-1">{sound.description}</p>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="music" className="pt-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {music.map((track) => (
-                  <motion.div 
-                    key={track.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: music.indexOf(track) * 0.1 }}
-                  >
-                    <Card className={`overflow-hidden transition-all duration-300 ${playingItemId === track.id ? 'ring-2 ring-primary' : 'hover:shadow-lg'}`}>
-                      <div className="relative">
-                        <AspectRatio ratio={16/9}>
-                          <img 
-                            src={track.thumbnail} 
-                            alt={track.title}
-                            className="object-cover w-full h-full"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                        </AspectRatio>
-                        
-                        <Button
-                          size="icon"
-                          className="absolute bottom-3 right-3 h-10 w-10 rounded-full bg-white text-primary hover:bg-white/90 shadow-lg"
-                          onClick={() => playSound(track)}
-                        >
-                          {playingItemId === track.id ? (
-                            <Pause className="h-5 w-5" />
-                          ) : (
-                            <Play className="h-5 w-5 ml-0.5" />
-                          )}
-                        </Button>
-                        
-                        <div className="absolute bottom-3 left-3 text-white flex items-center">
-                          <Headphones className="h-4 w-4 mr-1" />
-                          <span className="text-xs">{track.duration}</span>
-                        </div>
-                      </div>
-                      
-                      <CardContent className="p-4">
-                        <h3 className="font-semibold text-lg">{track.title}</h3>
-                        {track.artist && (
-                          <p className="text-xs text-muted-foreground mt-1">By {track.artist}</p>
-                        )}
-                        <p className="text-sm text-muted-foreground mt-2">{track.description}</p>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="videos" className="pt-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {videos.map((video) => (
-                  <motion.div 
-                    key={video.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: videos.indexOf(video) * 0.1 }}
-                  >
-                    <Card className="overflow-hidden hover:shadow-lg transition-all duration-300">
-                      <div className="relative">
-                        <AspectRatio ratio={16/9}>
-                          <img 
-                            src={video.thumbnail} 
-                            alt={video.title}
-                            className="object-cover w-full h-full"
-                          />
-                          <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                            <div className="h-14 w-14 bg-white/90 rounded-full flex items-center justify-center shadow-lg">
-                              <Play className="h-6 w-6 text-primary ml-1" />
-                            </div>
-                          </div>
-                        </AspectRatio>
-                        
-                        <div className="absolute bottom-3 right-3 bg-black/70 text-white text-xs px-2 py-1 rounded">
-                          {video.duration}
-                        </div>
-                      </div>
-                      
-                      <CardContent className="p-4">
-                        <h3 className="font-semibold text-lg">{video.title}</h3>
-                        <p className="text-sm text-muted-foreground mt-1">{video.description}</p>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
-            </TabsContent>
-          </Tabs>
-        </motion.div>
+          Media Library
+        </motion.h1>
+        <motion.p
+          className="mt-3 text-muted-foreground"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          Explore our collection of healing sounds, music, and educational videos
+        </motion.p>
       </div>
-    </Layout>
+
+      <Tabs defaultValue="sounds" className="space-y-8">
+        <TabsList className="grid grid-cols-3 max-w-md mx-auto">
+          <TabsTrigger value="sounds" className="flex items-center gap-2">
+            <FileAudio className="h-4 w-4" />
+            <span>Sounds</span>
+          </TabsTrigger>
+          <TabsTrigger value="music" className="flex items-center gap-2">
+            <Music className="h-4 w-4" />
+            <span>Music</span>
+          </TabsTrigger>
+          <TabsTrigger value="videos" className="flex items-center gap-2">
+            <Video className="h-4 w-4" />
+            <span>Videos</span>
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="sounds" className="pt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {sounds.map((sound) => (
+              <motion.div
+                key={sound.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: sounds.indexOf(sound) * 0.1 }}
+              >
+                <Card className={`overflow-hidden transition-all duration-300 ${playingItemId === sound.id ? 'ring-2 ring-primary' : 'hover:shadow-lg'}`}>
+                  <div className="relative">
+                    <AspectRatio ratio={16 / 9}>
+                      <img
+                        src={sound.thumbnail}
+                        alt={sound.title}
+                        className="object-cover w-full h-full"
+                      />
+                    </AspectRatio>
+                    <Button
+                      size="icon"
+                      className="absolute bottom-3 right-3 h-10 w-10 rounded-full bg-white text-primary hover:bg-white/90 shadow-lg"
+                      onClick={() => playSound(sound)}
+                    >
+                      {playingItemId === sound.id ? (
+                        <Pause className="h-5 w-5" />
+                      ) : (
+                        <Play className="h-5 w-5 ml-0.5" />
+                      )}
+                    </Button>
+
+                    <div className="absolute top-3 left-3 bg-black/50 text-white text-xs px-2 py-1 rounded">
+                      {sound.duration}
+                    </div>
+
+                    {sound.frequency && (
+                      <div className="absolute top-3 right-3 bg-primary/90 text-white text-xs px-2 py-1 rounded">
+                        {sound.frequency} Hz
+                      </div>
+                    )}
+                  </div>
+
+                  <CardContent className="p-4">
+                    <h3 className="font-semibold text-lg">{sound.title}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">{sound.description}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="music" className="pt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {music.map((track) => (
+              <motion.div
+                key={track.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: music.indexOf(track) * 0.1 }}
+              >
+                <Card className={`overflow-hidden transition-all duration-300 ${playingItemId === track.id ? 'ring-2 ring-primary' : 'hover:shadow-lg'}`}>
+                  <div className="relative">
+                    <AspectRatio ratio={16 / 9}>
+                      <img
+                        src={track.thumbnail}
+                        alt={track.title}
+                        className="object-cover w-full h-full"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    </AspectRatio>
+
+                    <Button
+                      size="icon"
+                      className="absolute bottom-3 right-3 h-10 w-10 rounded-full bg-white text-primary hover:bg-white/90 shadow-lg"
+                      onClick={() => playSound(track)}
+                    >
+                      {playingItemId === track.id ? (
+                        <Pause className="h-5 w-5" />
+                      ) : (
+                        <Play className="h-5 w-5 ml-0.5" />
+                      )}
+                    </Button>
+
+                    <div className="absolute bottom-3 left-3 text-white flex items-center">
+                      <Headphones className="h-4 w-4 mr-1" />
+                      <span className="text-xs">{track.duration}</span>
+                    </div>
+                  </div>
+
+                  <CardContent className="p-4">
+                    <h3 className="font-semibold text-lg">{track.title}</h3>
+                    {track.artist && (
+                      <p className="text-xs text-muted-foreground mt-1">By {track.artist}</p>
+                    )}
+                    <p className="text-sm text-muted-foreground mt-2">{track.description}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="videos" className="pt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {videos.map((video) => (
+              <motion.div
+                key={video.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: videos.indexOf(video) * 0.1 }}
+              >
+                <Card className="overflow-hidden hover:shadow-lg transition-all duration-300">
+                  <div className="relative">
+                    <AspectRatio ratio={16 / 9}>
+                      <img
+                        src={video.thumbnail}
+                        alt={video.title}
+                        className="object-cover w-full h-full"
+                      />
+                      <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                        <div className="h-14 w-14 bg-white/90 rounded-full flex items-center justify-center shadow-lg">
+                          <Play className="h-6 w-6 text-primary ml-1" />
+                        </div>
+                      </div>
+                    </AspectRatio>
+
+                    <div className="absolute bottom-3 right-3 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                      {video.duration}
+                    </div>
+                  </div>
+
+                  <CardContent className="p-4">
+                    <h3 className="font-semibold text-lg">{video.title}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">{video.description}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </TabsContent>
+      </Tabs>
+    </motion.div>
   );
 };
 

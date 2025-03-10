@@ -1,3 +1,4 @@
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -6,11 +7,11 @@ import { Menu, X, Music, MapPin, Library, PlusCircle, Info } from 'lucide-react'
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { useMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Header = () => {
   const location = useLocation();
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -28,27 +29,27 @@ const Header = () => {
     {
       name: 'Home',
       path: '/',
-      icon: <Music className="h-4 w-4 mr-2" />
+      icon: <Music className="h-4 w-4 mr-1" />
     },
     {
       name: 'Map',
       path: '/map',
-      icon: <MapPin className="h-4 w-4 mr-2" />
+      icon: <MapPin className="h-4 w-4 mr-1" />
     },
     {
       name: 'Media',
       path: '/media',
-      icon: <Library className="h-4 w-4 mr-2" />
+      icon: <Library className="h-4 w-4 mr-1" />
     },
     {
       name: 'Add Frequency',
       path: '/add',
-      icon: <PlusCircle className="h-4 w-4 mr-2" />
+      icon: <PlusCircle className="h-4 w-4 mr-1" />
     },
     {
       name: 'About',
       path: '/about',
-      icon: <Info className="h-4 w-4 mr-2" />
+      icon: <Info className="h-4 w-4 mr-1" />
     }
   ];
 
